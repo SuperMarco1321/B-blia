@@ -13,11 +13,12 @@ CAMINHO_BIBLIA = Path(__file__).parent.parent / "bibliaAveMaria.json"
 _biblia_raw: dict | None = None
 _indice: dict | None = None          # nome_livro → dados do livro
 _lista_livros: list[str] | None = None
+_por_testamento: dict | None = None   # "Antigo Testamento"/"Novo Testamento" → [nomes]
 
 
 def _carregar() -> dict:
     """Carrega o JSON uma única vez."""
-    global _biblia_raw, _indice, _lista_livros
+    global _biblia_raw, _indice, _lista_livros, _por_testamento
 
     if _biblia_raw is not None:
         return _biblia_raw
@@ -28,12 +29,19 @@ def _carregar() -> dict:
     # Monta índice rápido por nome do livro
     _indice = {}
     _lista_livros = []
+    _por_testamento = {}
 
-    for testamento in ["antigoTestamento", "novoTestamento"]:
-        for livro in _biblia_raw[testamento]:
+    rotulos = {
+        "antigoTestamento": "Antigo Testamento",
+        "novoTestamento": "Novo Testamento",
+    }
+    for chave, rotulo in rotulos.items():
+        _por_testamento[rotulo] = []
+        for livro in _biblia_raw[chave]:
             nome = livro["nome"]
             _indice[nome] = livro
             _lista_livros.append(nome)
+            _por_testamento[rotulo].append(nome)
 
     return _biblia_raw
 
@@ -42,6 +50,12 @@ def listar_livros() -> list[str]:
     """Retorna a lista de todos os livros na ordem canônica."""
     _carregar()
     return _lista_livros.copy()
+
+
+def listar_livros_por_testamento() -> dict[str, list[str]]:
+    """Retorna {"Antigo Testamento": [...], "Novo Testamento": [...]} direto do JSON."""
+    _carregar()
+    return {k: v.copy() for k, v in _por_testamento.items()}
 
 
 def listar_capitulos(livro: str) -> list[int]:
@@ -97,6 +111,42 @@ def obter_capitulo_completo(livro: str, capitulo: int) -> list[dict]:
                 for v in cap["versiculos"]
             ]
     return []
+
+
+def obter_livro_completo(livro: str) -> list[dict]:
+    """
+    Junta TODOS os capítulos de um livro, na ordem.
+    Formato: [{"capitulo": 1, "versiculos": [{"versiculo": 1, "texto": "..."}]}, ...]
+    """
+    _carregar()
+    dados_livro = _indice.get(livro)
+    if not dados_livro:
+        return []
+    return [
+        {
+            "capitulo": cap["capitulo"],
+            "versiculos": [
+                {"versiculo": v["versiculo"], "texto": v["texto"]}
+                for v in cap["versiculos"]
+            ],
+        }
+        for cap in dados_livro["capitulos"]
+    ]
+
+
+def obter_leitura_continua(livros: Optional[list[str]] = None) -> list[dict]:
+    """
+    Junta a leitura de vários livros (ou de todos, se 'livros' for None)
+    numa única sequência, na ordem canônica.
+    Formato: [{"livro": "Gênesis", "capitulos": [ ...obter_livro_completo... ]}, ...]
+    """
+    _carregar()
+    nomes = livros if livros is not None else _lista_livros
+    return [
+        {"livro": nome, "capitulos": obter_livro_completo(nome)}
+        for nome in nomes
+        if nome in _indice
+    ]
 
 
 def obter_partes_versiculo(livro: str, capitulo: int, versiculo: int) -> dict:
