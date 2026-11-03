@@ -43,7 +43,7 @@ def dividir_por_pontos(texto: str) -> Dict[str, str]:
             chave = letras[i]
 
         # Garante que a parte termine com ponto (se não terminar)
-        if not parte.endswith((".", "!", "?", "…")):
+        if not parte.endswith((".", "!", "?", "…", ",", ";", ":", "*")):
             parte = parte + "."
 
         resultado[chave] = parte

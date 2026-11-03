@@ -19,6 +19,7 @@ from core.biblia import (
     obter_leitura_continua,
     obter_texto_versiculo,
 )
+from core.leitura_liturgica import ler_referencia
 
 st.set_page_config(
     page_title="Bíblia Ave Maria",
@@ -75,6 +76,21 @@ st.markdown("""
         color: #8a73b5;
         margin: 1rem 0 0.3rem 0;
     }
+    .refrao {
+        background: #f1ecfa;
+        border-left: 4px solid #6b4c9a;
+        padding: 0.7rem 1rem;
+        margin: 0.4rem 0 1rem 0;
+        border-radius: 0 8px 8px 0;
+        font-style: italic;
+        font-size: 1.1rem;
+    }
+    .refrao-curto {
+        color: #6b4c9a;
+        font-style: italic;
+        margin: 0.1rem 0 0.9rem 1.2rem;
+    }
+    .estrofe { margin-bottom: 0.2rem; }
     .subtitulo-secao {
         font-size: 1.15rem;
         font-weight: 600;
@@ -109,11 +125,109 @@ def html_leitura_continua(blocos: list[dict], mostrar_livro: bool = True) -> tup
     return "".join(partes), total_caps, total_vers
 
 
+EXEMPLOS_LITURGICOS = [
+    "Sl 22(23),1-3a.3b-4.5.6 (R. 1)",
+    "Sl 144(145),8-9.10-11.12-13ab.13cd-14 (R. 17a)",
+    "1Cor 12,31–13,13",
+    "Hab 1,2-3; 2,2-4",
+    "Jo 1,1-5.9-12b",
+    "Gn 22,1-2.9a.10-13.15-18",
+    "Is 52,13–53,12",
+    "Lc 1,39-45",
+]
+
+
+def _usar_exemplo():
+    if st.session_state.get("exemplo_lit") != "—":
+        st.session_state["ref_lit"] = st.session_state["exemplo_lit"]
+
+
+def pagina_leitura_liturgica():
+    st.subheader("🕯️ Leitura litúrgica")
+    st.caption("Digite a referência na notação da CNBB e receba o texto da leitura.")
+
+    st.session_state.setdefault("ref_lit", EXEMPLOS_LITURGICOS[0])
+    st.selectbox("Exemplos", ["—"] + EXEMPLOS_LITURGICOS, key="exemplo_lit", on_change=_usar_exemplo)
+    referencia = st.text_input("Referência", key="ref_lit", help="Ex.: Sl 144(145),8-9.10-11.12-13ab.13cd-14 (R. 17a)")
+    mostrar_numeros = st.checkbox("Mostrar números dos versículos", value=False)
+
+    if not referencia.strip():
+        st.info("Digite uma referência para começar.")
+        return
+
+    res = ler_referencia(referencia)
+
+    if not res["trechos"]:
+        for aviso in res["avisos"]:
+            st.warning(aviso)
+        return
+
+    st.markdown(f"<div class='titulo-capitulo'>{escape(res['referencia_original'])}</div>", unsafe_allow_html=True)
+
+    refrao = res["refrao"]
+    refrao_texto = escape(refrao["texto"], quote=False) if refrao and refrao["texto"] else None
+    eh_salmo = res["livro"] == "Salmos"
+
+    if refrao_texto:
+        st.markdown(
+            f"<div class='refrao'><b>R.</b> {refrao_texto}</div>",
+            unsafe_allow_html=True,
+        )
+
+    for trecho in res["trechos"]:
+        if len(res["trechos"]) > 1:
+            st.markdown(
+                f"<div class='subtitulo-secao'>{escape(trecho['livro'])} {escape(trecho['referencia'])}</div>",
+                unsafe_allow_html=True,
+            )
+
+        if eh_salmo:
+            # cada segmento (separado por '.') é uma estrofe; refrão depois de cada uma
+            html = ""
+            for seg in trecho["segmentos"]:
+                html += f"<div class='estrofe versiculo'>{_html_segmento(seg, mostrar_numeros)}</div>"
+                if refrao_texto:
+                    html += f"<div class='refrao-curto'>R. {refrao_texto}</div>"
+        else:
+            html = "<div class='versiculo'>" + " ".join(
+                _html_segmento(seg, mostrar_numeros) for seg in trecho["segmentos"]
+            ) + "</div>"
+
+        st.markdown(f"<div class='bloco-capitulo'>{html}</div>", unsafe_allow_html=True)
+
+    if res["avisos"]:
+        with st.expander(f"⚠️ Avisos de precisão ({len(res['avisos'])})"):
+            for aviso in res["avisos"]:
+                st.write("• " + aviso)
+            st.caption(
+                "As letras (a, b, c...) da CNBB seguem as meias-linhas do original; aqui o texto é "
+                "dividido por ponto final. Onde isso não bate, a divisão é aproximada."
+            )
+
+
+def _html_segmento(seg: dict, mostrar_numeros: bool) -> str:
+    if not mostrar_numeros:
+        return escape(seg["texto"], quote=False)
+    partes = []
+    for v in seg["versiculos"]:
+        rotulo = f"{v['versiculo']}{v['letras'] or ''}"
+        partes.append(f"<span class='numero-versiculo'>{rotulo}</span>{escape(v['texto'], quote=False)}")
+    return " ".join(partes)
+
+
 def main():
     st.title("📖 Bíblia Ave Maria")
-    st.caption("Edição Católica • Navegação simples")
+    st.caption("Edição Católica")
 
     livros = listar_livros()
+
+    with st.sidebar:
+        modo = st.radio("Modo", ["📖 Bíblia", "🕯️ Leitura litúrgica"])
+        st.divider()
+
+    if modo.startswith("🕯️"):
+        pagina_leitura_liturgica()
+        return
 
     with st.sidebar:
         st.header("Navegação")

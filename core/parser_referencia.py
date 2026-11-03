@@ -87,7 +87,7 @@ def parse_referencia(texto: str) -> dict:
     livro_atual = None
     todos_versiculos = []
 
-    for bloco in blocos:
+    for idx_bloco, bloco in enumerate(blocos):
         match_livro = re.match(
             r"^([1-3]?[A-Za-zÀ-ú\s\.]+?)\s+(\d+.*)$",
             bloco
@@ -108,9 +108,10 @@ def parse_referencia(texto: str) -> dict:
         if not livro_atual:
             continue
 
-        todos_versiculos.extend(
-            _parse_capitulos_versiculos(livro_atual, resto)
-        )
+        itens = _parse_capitulos_versiculos(livro_atual, resto)
+        for item in itens:
+            item["bloco"] = idx_bloco   # trecho separado por ';'
+        todos_versiculos.extend(itens)
 
     return {
         "referencia_original": original,
@@ -212,7 +213,8 @@ def _parse_capitulos_versiculos(livro: str, texto: str) -> list[dict]:
 
     partes = [p for p in parte_versiculos.split(".") if p]
 
-    for parte in partes:
+    for idx_seg, parte in enumerate(partes):
+        n_antes = len(resultado)
         if "-" in parte or "–" in parte:
             pedacos = re.split(r"[–\-]", parte, maxsplit=1)
             if len(pedacos) != 2:
@@ -247,6 +249,9 @@ def _parse_capitulos_versiculos(livro: str, texto: str) -> list[dict]:
                     "versiculo": v,
                     "letras": letras
                 })
+
+        for item in resultado[n_antes:]:
+            item["segmento"] = idx_seg   # parte separada por '.'
 
     return resultado
 
