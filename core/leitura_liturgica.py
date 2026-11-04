@@ -11,7 +11,7 @@ from collections import defaultdict
 from typing import Optional
 
 from core.biblia import obter_texto_versiculo
-from core.parser_referencia import parse_referencia
+from core.parser_referencia import parse_referencia, _parse_capitulos_versiculos
 from utils.divisao_versiculo import dividir_por_pontos, extrair_letra_da_referencia
 
 # Títulos de salmo que o Ave Maria inclui dentro do v. 1, mas que o lecionário não lê.
@@ -34,18 +34,33 @@ def _limpar(texto: str, livro: str) -> str:
 # ------------------------------------------------------------
 # Texto de um versículo (com letras)
 # ------------------------------------------------------------
-def _partes_do_versiculo(livro: str, capitulo: int, versiculo: int, texto: str, avisos: list) -> list[str]:
-    """Divide o versículo em frases, removendo o título do salmo (se houver)."""
+def dividir_frases(texto: str) -> list[str]:
+    """Mesma divisão por ponto final de utils.dividir_por_pontos, mas SEM acrescentar pontuação."""
+    return [f.strip() for f in re.split(r"(?<=\.)\s+", texto.strip()) if f.strip()]
+
+
+def frases_do_versiculo(livro: str, texto: str) -> list[str]:
+    """Frases do versículo (texto limpo), na numeração usada pelas marcações. Inclui o título do salmo."""
+    return dividir_frases(_limpar(texto, livro))
+
+
+def _partes_do_versiculo(livro: str, capitulo: int, versiculo: int, texto: str, avisos: list) -> tuple[list[str], int]:
+    """
+    Divide o versículo em frases, removendo o título do salmo (se houver).
+    Devolve (frases, deslocamento): deslocamento = quantas frases iniciais foram omitidas (título).
+    """
     partes = list(dividir_por_pontos(texto).values())
+    deslocamento = 0
 
     if livro == "Salmos" and versiculo == 1 and len(partes) > 1:
         primeira = partes[0]
         if _TITULO_SALMO.match(primeira) and len(primeira.split()) <= 10:
             partes = partes[1:]
+            deslocamento = 1
             aviso = f"Salmos {capitulo},1: título do salmo omitido ('{primeira.rstrip('.')}')."
             if aviso not in avisos:
                 avisos.append(aviso)
-    return partes
+    return partes, deslocamento
 
 
 def _mapear_letras(letras: str, max_letra: int, n_partes: int) -> tuple[list[int], bool]:
@@ -73,29 +88,35 @@ def _mapear_letras(letras: str, max_letra: int, n_partes: int) -> tuple[list[int
     return sorted({letra_para_parte[i] for i in indices_letra if i < len(letra_para_parte)}), True
 
 
-def _texto_versiculo(
+def _resolver_versiculo(
     livro: str, capitulo: int, versiculo: int, letras: Optional[str],
     max_letra: int, avisos: list,
-) -> tuple[Optional[str], bool]:
-    """Devolve (texto, aproximado). texto=None se o versículo não existe."""
+) -> tuple[Optional[str], bool, list[int]]:
+    """
+    Núcleo: devolve (texto, aproximado, frases).
+    'frases' = índices das frases cobertas, na numeração do texto limpo COMPLETO
+    (inclui o título do salmo como frase 0), a mesma usada pelas marcações.
+    texto=None se o versículo não existe.
+    """
     texto = obter_texto_versiculo(livro, capitulo, versiculo)
     if texto is None:
         avisos.append(f"{livro} {capitulo},{versiculo}: versículo não encontrado no JSON.")
-        return None, False
+        return None, False, []
 
     texto = _limpar(texto, livro)
-    partes = _partes_do_versiculo(livro, capitulo, versiculo, texto, avisos)
+    partes, desloc = _partes_do_versiculo(livro, capitulo, versiculo, texto, avisos)
+    todas = list(range(desloc, desloc + len(partes)))
 
     if not letras:
         # Versículo inteiro (apenas sem o título do salmo, se for o caso)
-        return (" ".join(partes) if partes else texto), False
+        return (" ".join(partes) if partes else texto), False, todas
 
     indices, aproximado = _mapear_letras(letras, max_letra, len(partes))
     if not indices:
         avisos.append(
             f"{livro} {capitulo},{versiculo}{letras}: letra fora do texto; versículo inteiro usado."
         )
-        return " ".join(partes), False
+        return " ".join(partes), False, todas
 
     if aproximado:
         aviso = (
@@ -105,7 +126,16 @@ def _texto_versiculo(
         if aviso not in avisos:
             avisos.append(aviso)
 
-    return " ".join(partes[i] for i in indices), aproximado
+    return " ".join(partes[i] for i in indices), aproximado, [i + desloc for i in indices]
+
+
+def _texto_versiculo(
+    livro: str, capitulo: int, versiculo: int, letras: Optional[str],
+    max_letra: int, avisos: list,
+) -> tuple[Optional[str], bool]:
+    """Devolve (texto, aproximado). texto=None se o versículo não existe."""
+    texto, aproximado, _ = _resolver_versiculo(livro, capitulo, versiculo, letras, max_letra, avisos)
+    return texto, aproximado
 
 
 # ------------------------------------------------------------
@@ -131,37 +161,76 @@ def _rotulo_segmento(itens: list[dict]) -> str:
 # ------------------------------------------------------------
 # Refrão
 # ------------------------------------------------------------
+# Prefixos que a CNBB usa antes do versículo do refrão: "cf. 6", "v. 6", "vv. 6-7"
+_PREFIXO_REFRAO = re.compile(r"^\s*(cf|vv?|vers)\.?(?=\s|\d|$)\s*", re.IGNORECASE)
+
+
+def _normalizar_refrao(refrao: str) -> tuple[str, bool]:
+    """
+    Tira os prefixos 'cf.', 'v.', 'vv.' do refrão.
+    Devolve (referência limpa, é_cf). 'cf.' = o refrão é ADAPTADO desse versículo.
+    """
+    texto, cf = refrao.strip(), False
+    while True:
+        m = _PREFIXO_REFRAO.match(texto)
+        if not m or not texto[m.end():].strip():
+            break
+        if m.group(1).lower() == "cf":
+            cf = True
+        texto = texto[m.end():]
+    return texto.strip(), cf
+
+
 def _resolver_refrao(refrao: Optional[str], livro: str, capitulo: int, max_letras: dict, avisos: list) -> Optional[dict]:
     """
-    Refrão pode vir como '17a' (mesmo salmo) ou como referência completa ('Sl 22,1').
-    Devolve {"referencia": "...", "texto": "..." | None}.
+    Refrão pode vir como '17a', 'cf. 6', 'cf. 6-7' (mesmo salmo) ou como referência
+    completa ('Sl 22,1' / 'cf. Sl 22,1').
+    Devolve {"referencia": "cf. 6", "texto": "..." | None, "cf": bool, "fonte": "Salmos 23,6"}.
     """
     if not refrao:
         return None
 
-    m = re.fullmatch(r"(\d+)([a-z]*)", refrao.replace(" ", "").lower())
-    if m:
-        v = int(m.group(1))
-        letras = m.group(2) or None
-        chave = (livro, capitulo, v)
-        max_l = max(max_letras.get(chave, 0), max((ord(c) - 96 for c in (letras or "")), default=0))
-        texto, _ = _texto_versiculo(livro, capitulo, v, letras, max_l, avisos)
-        return {"referencia": refrao, "texto": texto}
+    limpo, cf = _normalizar_refrao(refrao)
+    compacto = re.sub(r"\s+", "", limpo)
 
-    # Referência completa
-    parsed = parse_referencia(refrao)
-    if parsed["versiculos"]:
-        textos = []
-        for item in parsed["versiculos"]:
-            max_l = max((ord(c) - 96 for c in (item["letras"] or "")), default=0)
-            t, _ = _texto_versiculo(item["livro"], item["capitulo"], item["versiculo"], item["letras"], max_l, avisos)
-            if t:
-                textos.append(t)
-        if textos:
-            return {"referencia": refrao, "texto": " ".join(textos)}
+    # Monta a lista de versículos do refrão
+    itens = []
+    if re.fullmatch(r"\d+[a-z]*([.\-–]\d+[a-z]*)*", compacto, flags=re.IGNORECASE):
+        # só versículos → mesmo capítulo do salmo (aceita 6, 17a, 6-7, 1.6)
+        itens = _parse_capitulos_versiculos(livro, f"{capitulo},{compacto}")
+    elif re.fullmatch(r"\d+,\d.*", compacto):
+        # capítulo,versículo sem livro → mesmo livro
+        itens = _parse_capitulos_versiculos(livro, compacto)
+    else:
+        itens = parse_referencia(limpo)["versiculos"]
 
-    avisos.append(f"Refrão '{refrao}' não pôde ser resolvido; mantido como indicado.")
-    return {"referencia": refrao, "texto": None}
+    textos, fontes = [], []
+    for item in itens:
+        if item.get("versiculo") is None:
+            continue
+        chave = (item["livro"], item["capitulo"], item["versiculo"])
+        max_l = max(max_letras.get(chave, 0), max((ord(c) - 96 for c in (item["letras"] or "")), default=0))
+        t, _ = _texto_versiculo(item["livro"], item["capitulo"], item["versiculo"], item["letras"], max_l, avisos)
+        if t:
+            textos.append(t)
+            fontes.append(f"{item['livro']} {item['capitulo']},{item['versiculo']}{item['letras'] or ''}")
+
+    if not textos:
+        avisos.append(f"Refrão '{refrao}' não pôde ser resolvido; mantido como indicado.")
+        return {"referencia": refrao, "texto": None, "cf": cf, "fonte": None}
+
+    if cf:
+        avisos.append(
+            f"Refrão '{refrao}': o lecionário adapta esse versículo; o texto exibido é o do versículo "
+            f"({fontes[0]}{'…' if len(fontes) > 1 else ''}), e a redação exata do refrão pode ser diferente."
+        )
+
+    return {
+        "referencia": refrao,
+        "texto": " ".join(textos),
+        "cf": cf,
+        "fonte": fontes[0] if len(fontes) == 1 else f"{fontes[0]} a {fontes[-1].rsplit(' ', 1)[-1]}",
+    }
 
 
 # ------------------------------------------------------------
@@ -173,7 +242,7 @@ def ler_referencia(referencia: str) -> dict:
     {
       "referencia_original": str,
       "livro": str | None,
-      "refrao": {"referencia": "17a", "texto": "..."} | None,
+      "refrao": {"referencia": "17a", "texto": "...", "cf": False, "fonte": "Salmos 144,17a"} | None,
       "trechos": [                      # um por bloco separado por ';'
         {
           "livro": "Habacuc",
@@ -236,17 +305,19 @@ def ler_referencia(referencia: str) -> dict:
                 if it.get("nota"):
                     avisos.append(f"{it['livro']} {it['capitulo']},{it['versiculo']}: {it['nota']}.")
                 chave = (it["livro"], it["capitulo"], it["versiculo"])
-                texto, aprox = _texto_versiculo(
+                texto, aprox, frases = _resolver_versiculo(
                     it["livro"], it["capitulo"], it["versiculo"], it.get("letras"),
                     max_letras.get(chave, 0), avisos,
                 )
                 if texto:
                     versiculos_out.append({
+                        "livro": it["livro"],
                         "capitulo": it["capitulo"],
                         "versiculo": it["versiculo"],
                         "letras": it.get("letras"),
                         "texto": texto,
                         "aproximado": aprox,
+                        "frases": frases,
                     })
 
             if versiculos_out:

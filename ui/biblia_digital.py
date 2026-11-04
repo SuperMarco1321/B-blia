@@ -20,6 +20,7 @@ from core.biblia import (
     obter_texto_versiculo,
 )
 from core.leitura_liturgica import ler_referencia
+from ui.marcacoes_ui import controles_marcacao_sidebar, mostrar_texto_marcado, pagina_marcacoes
 
 st.set_page_config(
     page_title="Bíblia Ave Maria",
@@ -30,55 +31,62 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+    /* Tema azul-marinho: cores fixas aqui para o texto bíblico ficar legível em qualquer configuração */
     .versiculo {
         font-size: 1.15rem;
-        line-height: 1.7;
+        line-height: 1.75;
         margin-bottom: 0.6rem;
+        color: #e6ecf7;
     }
     .numero-versiculo {
         font-weight: 600;
-        color: #6b4c9a;
+        color: #7db3ff;
         margin-right: 0.4rem;
     }
     .titulo-capitulo {
         text-align: center;
-        font-size: 1.4rem;
+        font-size: 1.5rem;
         font-weight: 600;
         margin: 1.2rem 0 1.5rem 0;
-        color: #3d2b5a;
+        color: #cfe0ff;
+        letter-spacing: 0.01em;
     }
     .bloco-capitulo {
-        background-color: #faf9fc;
+        background-color: #15233f;
+        color: #e6ecf7;
         padding: 1.5rem 1.8rem;
-        border-radius: 10px;
-        border: 1px solid #e8e4f0;
+        border-radius: 12px;
+        border: 1px solid #2a416b;
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
         margin-bottom: 1.5rem;
     }
     .item-lista {
         padding: 0.45rem 0.7rem;
         margin-bottom: 0.25rem;
-        background: #f7f5fb;
+        background: #1a2b4d;
+        color: #e6ecf7;
         border-radius: 6px;
-        border: 1px solid #ebe6f5;
+        border: 1px solid #2f4777;
         font-size: 1.05rem;
     }
     .titulo-livro {
         font-size: 1.3rem;
         font-weight: 700;
-        color: #3d2b5a;
+        color: #cfe0ff;
         margin: 1.6rem 0 0.4rem 0;
         padding-bottom: 0.3rem;
-        border-bottom: 2px solid #e8e4f0;
+        border-bottom: 2px solid #2a416b;
     }
     .marca-capitulo {
         font-size: 0.95rem;
         font-weight: 600;
-        color: #8a73b5;
+        color: #8fb4f0;
         margin: 1rem 0 0.3rem 0;
     }
     .refrao {
-        background: #f1ecfa;
-        border-left: 4px solid #6b4c9a;
+        background: #1b3158;
+        color: #e6ecf7;
+        border-left: 4px solid #5b9cff;
         padding: 0.7rem 1rem;
         margin: 0.4rem 0 1rem 0;
         border-radius: 0 8px 8px 0;
@@ -86,7 +94,7 @@ st.markdown("""
         font-size: 1.1rem;
     }
     .refrao-curto {
-        color: #6b4c9a;
+        color: #8fb4f0;
         font-style: italic;
         margin: 0.1rem 0 0.9rem 1.2rem;
     }
@@ -94,7 +102,7 @@ st.markdown("""
     .subtitulo-secao {
         font-size: 1.15rem;
         font-weight: 600;
-        color: #5a4580;
+        color: #a9c6f5;
         margin: 1.2rem 0 0.6rem 0;
     }
 </style>
@@ -128,6 +136,7 @@ def html_leitura_continua(blocos: list[dict], mostrar_livro: bool = True) -> tup
 EXEMPLOS_LITURGICOS = [
     "Sl 22(23),1-3a.3b-4.5.6 (R. 1)",
     "Sl 144(145),8-9.10-11.12-13ab.13cd-14 (R. 17a)",
+    "Sl 23(24),1-2.3-4ab.5-6 (R. cf. 6)",
     "1Cor 12,31–13,13",
     "Hab 1,2-3; 2,2-4",
     "Jo 1,1-5.9-12b",
@@ -169,8 +178,11 @@ def pagina_leitura_liturgica():
     eh_salmo = res["livro"] == "Salmos"
 
     if refrao_texto:
+        nota_cf = ""
+        if refrao.get("cf") and refrao.get("fonte"):
+            nota_cf = f" <small>(cf. {escape(refrao['fonte'])})</small>"
         st.markdown(
-            f"<div class='refrao'><b>R.</b> {refrao_texto}</div>",
+            f"<div class='refrao'><b>R.</b> {refrao_texto}{nota_cf}</div>",
             unsafe_allow_html=True,
         )
 
@@ -222,11 +234,15 @@ def main():
     livros = listar_livros()
 
     with st.sidebar:
-        modo = st.radio("Modo", ["📖 Bíblia", "🕯️ Leitura litúrgica"])
+        modo = st.radio("Modo", ["📖 Bíblia", "🕯️ Leitura litúrgica", "🖍️ Marcações"])
         st.divider()
 
     if modo.startswith("🕯️"):
         pagina_leitura_liturgica()
+        return
+
+    if modo.startswith("🖍️"):
+        pagina_marcacoes()
         return
 
     with st.sidebar:
@@ -273,6 +289,10 @@ def main():
                     help="0 = todos os versículos do capítulo"
                 )
 
+    with st.sidebar:
+        st.divider()
+        indice, so_marcado = controles_marcacao_sidebar()
+
     # ========== CONTEÚDO PRINCIPAL ==========
 
     # 1. Todos os livros → leitura contínua (ou índice, se marcado)
@@ -302,6 +322,12 @@ def main():
         if testamento_sel == "Bíblia inteira":
             st.caption("Leitura contínua de toda a Bíblia — pode demorar alguns segundos para carregar.")
 
+        if indice is not None:
+            if so_marcado:
+                nomes = [n for n in nomes if n in indice.livros_marcados()]
+            mostrar_texto_marcado(obter_leitura_continua(nomes), indice, so_marcado=so_marcado)
+            return
+
         html, n_caps, n_vers = html_leitura_continua(obter_leitura_continua(nomes))
         st.markdown(f"<div class='bloco-capitulo'>{html}</div>", unsafe_allow_html=True)
         st.caption(f"{len(nomes)} livros • {n_caps} capítulos • {n_vers} versículos")
@@ -326,6 +352,13 @@ def main():
             st.caption(f"{len(capitulos)} capítulos")
             return
 
+        if indice is not None:
+            mostrar_texto_marcado(
+                [{"livro": livro, "capitulos": obter_livro_completo(livro)}],
+                indice, mostrar_livro=False, so_marcado=so_marcado,
+            )
+            return
+
         html, n_caps, n_vers = html_leitura_continua(
             [{"livro": livro, "capitulos": obter_livro_completo(livro)}],
             mostrar_livro=False,
@@ -342,12 +375,19 @@ def main():
                 f"<div class='titulo-capitulo'>{livro} {capitulo},{versiculo}</div>",
                 unsafe_allow_html=True
             )
-            st.markdown(
-                f"<div class='bloco-capitulo'><div class='versiculo'>"
-                f"<span class='numero-versiculo'>{versiculo}</span>{texto}"
-                f"</div></div>",
-                unsafe_allow_html=True
-            )
+            if indice is not None:
+                mostrar_texto_marcado(
+                    [{"livro": livro, "capitulos": [{"capitulo": capitulo,
+                      "versiculos": [{"versiculo": versiculo, "texto": texto}]}]}],
+                    indice, mostrar_livro=False, mostrar_capitulo=False,
+                )
+            else:
+                st.markdown(
+                    f"<div class='bloco-capitulo'><div class='versiculo'>"
+                    f"<span class='numero-versiculo'>{versiculo}</span>{texto}"
+                    f"</div></div>",
+                    unsafe_allow_html=True
+                )
         else:
             st.warning(f"Versículo {versiculo} não encontrado em {livro} {capitulo}.")
         return
@@ -359,6 +399,14 @@ def main():
         return
 
     st.markdown(f"<div class='titulo-capitulo'>{livro} {capitulo}</div>", unsafe_allow_html=True)
+
+    if indice is not None:
+        mostrar_texto_marcado(
+            [{"livro": livro, "capitulos": [{"capitulo": capitulo, "versiculos": versiculos}]}],
+            indice, mostrar_livro=False, mostrar_capitulo=False,
+        )
+        st.caption(f"{len(versiculos)} versículos")
+        return
 
     html_versiculos = ""
     for v in versiculos:

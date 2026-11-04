@@ -1,0 +1,180 @@
+{
+ "formato": "biblia-marcacoes/1",
+ "exportado_em": "2026-11-04T21:29:18+00:00",
+ "celebracoes": [
+  {
+   "id": 1,
+   "nome": "Baptismo do Senhor",
+   "cor": "Branco",
+   "tempo": "Natal",
+   "semana": null,
+   "dia_semana": "Domingo",
+   "grau": "Festa",
+   "preceito": 1,
+   "observacao": null,
+   "arquivada": 0,
+   "criado_em": "2026-11-04T21:07:58+00:00",
+   "atualizado_em": "2026-11-04T21:11:38+00:00"
+  }
+ ],
+ "leituras": [
+  {
+   "id": 1,
+   "celebracao_id": 1,
+   "tipo": "primeira",
+   "tipo_outro": null,
+   "ciclo": "A",
+   "referencia": "Is 60,1-6",
+   "observacao": null,
+   "arquivada": 0,
+   "criado_em": "2026-11-04T21:13:58+00:00",
+   "atualizado_em": "2026-11-04T21:13:58+00:00"
+  },
+  {
+   "id": 2,
+   "celebracao_id": 1,
+   "tipo": "salmo",
+   "tipo_outro": null,
+   "ciclo": "A",
+   "referencia": "Sl 71(72),1-2.7-8.10-11.12-13 (R. cf. 11)",
+   "observacao": null,
+   "arquivada": 0,
+   "criado_em": "2026-11-04T21:21:58+00:00",
+   "atualizado_em": "2026-11-04T21:21:58+00:00"
+  },
+  {
+   "id": 3,
+   "celebracao_id": 1,
+   "tipo": "segunda",
+   "tipo_outro": null,
+   "ciclo": "A",
+   "referencia": "Ef 3,2-3a.5-6",
+   "observacao": null,
+   "arquivada": 0,
+   "criado_em": "2026-11-04T21:29:18+00:00",
+   "atualizado_em": "2026-11-04T21:29:18+00:00"
+  }
+ ],
+ "historico": [
+  {
+   "id": 1,
+   "entidade": "celebracao",
+   "entidade_id": 1,
+   "acao": "criada",
+   "snapshot": {
+    "id": 1,
+    "nome": "Baptismo do Senhor",
+    "cor": "Branco",
+    "tempo": "Natal",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Festa",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-04T21:07:58+00:00",
+    "atualizado_em": "2026-11-04T21:07:58+00:00"
+   },
+   "registrado_em": "2026-11-04T21:07:58+00:00"
+  },
+  {
+   "id": 2,
+   "entidade": "celebracao",
+   "entidade_id": 1,
+   "acao": "arquivada",
+   "snapshot": {
+    "id": 1,
+    "nome": "Baptismo do Senhor",
+    "cor": "Branco",
+    "tempo": "Natal",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Festa",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-04T21:07:58+00:00",
+    "atualizado_em": "2026-11-04T21:07:58+00:00"
+   },
+   "registrado_em": "2026-11-04T21:10:52+00:00"
+  },
+  {
+   "id": 3,
+   "entidade": "celebracao",
+   "entidade_id": 1,
+   "acao": "restaurada",
+   "snapshot": {
+    "id": 1,
+    "nome": "Baptismo do Senhor",
+    "cor": "Branco",
+    "tempo": "Natal",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Festa",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 1,
+    "criado_em": "2026-11-04T21:07:58+00:00",
+    "atualizado_em": "2026-11-04T21:10:52+00:00"
+   },
+   "registrado_em": "2026-11-04T21:11:38+00:00"
+  },
+  {
+   "id": 4,
+   "entidade": "leitura",
+   "entidade_id": 1,
+   "acao": "criada",
+   "snapshot": {
+    "id": 1,
+    "celebracao_id": 1,
+    "tipo": "primeira",
+    "tipo_outro": null,
+    "ciclo": "A",
+    "referencia": "Is 60,1-6",
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-04T21:13:58+00:00",
+    "atualizado_em": "2026-11-04T21:13:58+00:00"
+   },
+   "registrado_em": "2026-11-04T21:13:58+00:00"
+  },
+  {
+   "id": 5,
+   "entidade": "leitura",
+   "entidade_id": 2,
+   "acao": "criada",
+   "snapshot": {
+    "id": 2,
+    "celebracao_id": 1,
+    "tipo": "salmo",
+    "tipo_outro": null,
+    "ciclo": "A",
+    "referencia": "Sl 71(72),1-2.7-8.10-11.12-13 (R. cf. 11)",
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-04T21:21:58+00:00",
+    "atualizado_em": "2026-11-04T21:21:58+00:00"
+   },
+   "registrado_em": "2026-11-04T21:21:58+00:00"
+  },
+  {
+   "id": 6,
+   "entidade": "leitura",
+   "entidade_id": 3,
+   "acao": "criada",
+   "snapshot": {
+    "id": 3,
+    "celebracao_id": 1,
+    "tipo": "segunda",
+    "tipo_outro": null,
+    "ciclo": "A",
+    "referencia": "Ef 3,2-3a.5-6",
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-04T21:29:18+00:00",
+    "atualizado_em": "2026-11-04T21:29:18+00:00"
+   },
+   "registrado_em": "2026-11-04T21:29:18+00:00"
+  }
+ ]
+}

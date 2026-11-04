@@ -59,6 +59,25 @@ def quantos_versiculos(livro: str, capitulo: int) -> int | None:
     return indice.get(livro, {}).get(capitulo)
 
 
+# Refrão: "(R. 17a)", "(R. cf. 6)", "(R/ 6)" e, sem parênteses, "... R. 1" no fim da referência.
+_RE_REFRAO_PARENTESES = re.compile(r"\(\s*R\s*[./]\s*(.*?)\)", flags=re.IGNORECASE)
+_RE_REFRAO_FINAL = re.compile(
+    r"\s+R\.\s*((?:cf\.?\s*)?\d+[a-z]*(?:[,.\-–]\d+[a-z]*)*)\s*$",
+    flags=re.IGNORECASE,
+)
+
+
+def _extrair_refrao(original: str) -> tuple[Optional[str], str]:
+    """Devolve (refrão ou None, texto sem o refrão)."""
+    for padrao in (_RE_REFRAO_PARENTESES, _RE_REFRAO_FINAL):
+        m = padrao.search(original)
+        if m:
+            refrao = m.group(1).strip() or None
+            texto = (original[:m.start()] + " " + original[m.end():]).strip()
+            return refrao, texto
+    return None, original
+
+
 def parse_referencia(texto: str) -> dict:
     """
     Recebe uma string de referência (ex: "Sl 22(23),1-3.5.7-9 (R. 1)")
@@ -74,12 +93,8 @@ def parse_referencia(texto: str) -> dict:
 
     original = texto.strip()
 
-    # 1. Extrai o refrão
-    match_refrao = re.search(r"\(R\.\s*(.*?)\)", original, flags=re.IGNORECASE)
-    refrao = match_refrao.group(1).strip() if match_refrao else None
-
-    # Remove o refrão do texto
-    texto_limpo = re.sub(r"\s*\(R\..*?\)", "", original, flags=re.IGNORECASE).strip()
+    # 1. Extrai o refrão (e o remove do texto)
+    refrao, texto_limpo = _extrair_refrao(original)
 
     # 2. Separa por ponto e vírgula
     blocos = [b.strip() for b in texto_limpo.split(";") if b.strip()]

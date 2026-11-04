@@ -1,0 +1,9 @@
+# Tema azul-marinho escuro da Bíblia Digital.
+# Este arquivo precisa ficar na pasta de onde você roda "streamlit run" (a raiz do projeto).
+[theme]
+base = "dark"
+primaryColor = "#5b9cff"
+backgroundColor = "#0b1426"
+secondaryBackgroundColor = "#111d36"
+textColor = "#e6ecf7"
+font = "sans serif"
