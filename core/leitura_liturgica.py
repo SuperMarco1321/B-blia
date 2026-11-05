@@ -276,6 +276,12 @@ def ler_referencia(referencia: str) -> dict:
         avisos.append("Não foi possível interpretar a referência (livro não reconhecido ou formato inválido).")
         return resultado
 
+    if any(it.get("cf") for it in itens):
+        avisos.append(
+            "Referência com 'cf.': o lecionário adapta esse versículo; o texto exibido e a marcação seguem "
+            "o versículo da Bíblia, e a redação exata (por exemplo, da aclamação) pode ser diferente."
+        )
+
     # Maior letra usada em cada versículo na referência inteira (para o mapeamento de letras)
     max_letras: dict[tuple, int] = defaultdict(int)
     for it in itens:

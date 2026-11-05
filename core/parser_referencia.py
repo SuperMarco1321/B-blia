@@ -103,6 +103,16 @@ def parse_referencia(texto: str) -> dict:
     todos_versiculos = []
 
     for idx_bloco, bloco in enumerate(blocos):
+        # "cf. Mt 2,2" / "(cf. Mt 2,2)": o lecionário ADAPTA esse versículo (comum nas aclamações).
+        # Tira o prefixo (e os parênteses ao redor) e marca os itens com cf=True.
+        cf = False
+        m_cf = re.match(r"^\s*(\(?)\s*cf\b\.?\s*", bloco, flags=re.IGNORECASE)
+        if m_cf:
+            cf = True
+            bloco = bloco[m_cf.end():]
+            if m_cf.group(1):
+                bloco = bloco.rstrip().rstrip(")").rstrip()
+
         match_livro = re.match(
             r"^([1-3]?[A-Za-zÀ-ú\s\.]+?)\s+(\d+.*)$",
             bloco
@@ -126,6 +136,7 @@ def parse_referencia(texto: str) -> dict:
         itens = _parse_capitulos_versiculos(livro_atual, resto)
         for item in itens:
             item["bloco"] = idx_bloco   # trecho separado por ';'
+            item["cf"] = cf
         todos_versiculos.extend(itens)
 
     return {

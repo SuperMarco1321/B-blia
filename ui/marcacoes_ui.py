@@ -293,6 +293,12 @@ def _nova_leitura(cel: dict):
     c2.selectbox("Ciclo", _opcoes_ciclo(), key="nl_ciclo")
     if tipo_sel == TIPOS_LEITURA["outro"]:
         st.text_input("Qual?", key="nl_outro", placeholder="Ex.: Oração dos fiéis")
+    if (tipo_sel in (TIPOS_LEITURA["evangelho"], TIPOS_LEITURA["aclamacao"])
+            and _codigo_ciclo(st.session_state.get("nl_ciclo", CICLOS["TODOS"])) in ("I", "II")):
+        st.info(
+            "Dica: o Evangelho e a aclamação dos dias de semana não mudam entre ano par e ímpar "
+            "(só a 1ª leitura e o salmo mudam). Normalmente se usa “Todos os anos”."
+        )
     st.text_input(
         "Referência (notação CNBB)", key="nl_ref",
         placeholder="Ex.: Sl 23(24),1-2.3-4ab.5-6 (R. cf. 6)",
