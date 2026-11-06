@@ -10,6 +10,7 @@ import streamlit as st
 
 from core.leitura_liturgica import ler_referencia
 from core.marcacoes import Filtros, Marca, cobertura, construir_indice, formatar_versiculos
+from core.marcacoes_lote import interpretar_bloco, ordem_legivel, tem_segunda_por_padrao
 from core.marcacoes_modelo import (
     CICLOS, CORES, DIAS_SEMANA, GRAUS, TEMPOS, TIPOS_LEITURA, rotulo_ciclo, rotulo_tipo,
 )
@@ -283,11 +284,100 @@ def _salvar_nova_leitura(cid: int):
     s["nl_outro"] = ""
 
 
+def _estado_bloco(cid: int):
+    """Interpreta o bloco a partir do que está na tela (usado pelo botão de salvar)."""
+    s = st.session_state
+    ciclo = _codigo_ciclo(s.get(f"lote_ciclo_{cid}", CICLOS["TODOS"]))
+    ev_todos = ciclo in ("I", "II") and s.get(f"lote_evtodos_{cid}", True)
+    return interpretar_bloco(
+        s.get(f"lote_texto_{cid}", ""), s.get(f"lote_seg_{cid}", False), ciclo, ev_todos,
+        db.listar_leituras(cid, incluir_arquivadas=True),
+    )
+
+
+def _salvar_bloco(cid: int):
+    s = st.session_state
+    res = _estado_bloco(cid)
+    if not res.a_adicionar:
+        s[f"lote_msg_{cid}"] = ("erro", "Nada para adicionar.")
+        return
+    try:
+        ids = db.adicionar_leituras(cid, res.para_banco())
+    except ValueError as e:
+        s[f"lote_msg_{cid}"] = ("erro", str(e))
+        return
+    ignoradas = sum(1 for l in res.linhas if l.duplicada)
+    extra = f" ({ignoradas} já existia(m) e foi(ram) ignorada(s))" if ignoradas else ""
+    s[f"lote_msg_{cid}"] = ("ok", f"{len(ids)} leitura(s) adicionada(s){extra}.")
+    s[f"lote_texto_{cid}"] = ""       # limpa o texto; ciclo e 2ª leitura ficam para o próximo bloco
+
+
+def _bloco_leituras(cel: dict):
+    """Cadastro rápido: uma referência por linha, o tipo vem da posição da linha."""
+    cid = cel["id"]
+    st.markdown("##### ⚡ Adicionar leituras em bloco")
+
+    c1, c2 = st.columns(2)
+    ciclo_rot = c1.selectbox("Ciclo (vale para o bloco todo)", _opcoes_ciclo(), key=f"lote_ciclo_{cid}")
+    com_segunda = c2.checkbox(
+        "Tem segunda leitura", value=tem_segunda_por_padrao(cel), key=f"lote_seg_{cid}",
+        help="Já vem marcado para domingos e solenidades.",
+    )
+    ciclo = _codigo_ciclo(ciclo_rot)
+    ev_todos = False
+    if ciclo in ("I", "II"):
+        ev_todos = st.checkbox(
+            "Evangelho e aclamação valem para todos os anos (recomendado)", value=True, key=f"lote_evtodos_{cid}",
+            help="Nos dias de semana só a 1ª leitura e o salmo mudam entre ano par e ímpar.",
+        )
+
+    st.caption(f"Uma referência por linha, nesta ordem: **{ordem_legivel(com_segunda)}**. "
+               "Linha em branco pula a posição.")
+    texto = st.text_area("Leituras", key=f"lote_texto_{cid}", height=150, label_visibility="collapsed",
+                         placeholder="Is 9,1-6\nSl 95(96),1-2a.2b-3.11-12.13 (R. Lc 2,11)\nTt 2,11-14\nLc 2,10-11\nLc 2,1-14")
+
+    res = interpretar_bloco(texto, com_segunda, ciclo, ev_todos, db.listar_leituras(cid, incluir_arquivadas=True))
+    for erro in res.erros:
+        st.error(erro)
+    for aviso in res.avisos:
+        st.caption("ℹ️ " + aviso)
+
+    if res.linhas:
+        linhas = []
+        for l in res.linhas:
+            if l.pulada:
+                situacao = "— pulada"
+            elif l.duplicada:
+                situacao = "♻️ já cadastrada (será ignorada)"
+            else:
+                ok, resumo, _ = resumo_referencia(l.referencia)
+                situacao = f"✅ {resumo}" if ok else "⚠️ não interpretada (será salva mesmo assim)"
+            linhas.append({
+                "Linha": l.posicao, "Tipo": TIPOS_LEITURA[l.tipo], "Ciclo": rotulo_ciclo(l.ciclo),
+                "Referência": l.referencia or "—", "Situação": situacao,
+            })
+        st.dataframe(linhas, hide_index=True, width="stretch")
+
+    n = len(res.a_adicionar)
+    st.button(
+        f"Adicionar {n} leitura(s)" if n else "Adicionar leituras",
+        type="primary", key=f"lote_btn_{cid}", disabled=n == 0,
+        on_click=_salvar_bloco, args=(cid,),
+    )
+    msg = st.session_state.pop(f"lote_msg_{cid}", None)
+    if msg:
+        (st.success if msg[0] == "ok" else st.error)(msg[1])
+
+
 def _nova_leitura(cel: dict):
-    st.markdown("##### ➕ Adicionar leitura")
     if cel["arquivada"]:
+        st.markdown("##### ➕ Adicionar leituras")
         st.caption("Restaure a celebração para adicionar leituras.")
         return
+    _bloco_leituras(cel)
+    st.divider()
+    st.markdown("##### ➕ Adicionar leitura avulsa")
+    st.caption("Para uma leitura fora do padrão: tipo “Outro”, observação, etc.")
     c1, c2 = st.columns(2)
     tipo_sel = c1.selectbox("Tipo (opcional)", _opcoes_tipo(), key="nl_tipo")
     c2.selectbox("Ciclo", _opcoes_ciclo(), key="nl_ciclo")

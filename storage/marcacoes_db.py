@@ -190,6 +190,30 @@ def adicionar_leitura(celebracao_id: int, dados: dict) -> int:
     return id_
 
 
+def adicionar_leituras(celebracao_id: int, lista: list[dict]) -> list[int]:
+    """
+    Adiciona várias leituras de uma vez, de forma ATÔMICA: se qualquer uma for inválida,
+    nenhuma é salva. Grava o backup JSON uma única vez no final.
+    """
+    dados = [normalizar_leitura(d) for d in lista]       # valida tudo antes de gravar
+    agora = _agora()
+    ids = []
+    with _conexao() as con:
+        if not _linha(con, "celebracoes", celebracao_id):
+            raise ValueError(f"Celebração {celebracao_id} não existe.")
+        for d in dados:
+            cur = con.execute(
+                """INSERT INTO leituras (celebracao_id, tipo, tipo_outro, ciclo, referencia, observacao, criado_em, atualizado_em)
+                   VALUES (:cid,:tipo,:tipo_outro,:ciclo,:referencia,:observacao,:t,:t)""",
+                {**d, "cid": celebracao_id, "t": agora},
+            )
+            _registrar(con, "leitura", cur.lastrowid, "criada", _linha(con, "leituras", cur.lastrowid))
+            ids.append(cur.lastrowid)
+    if ids:
+        _salvar_backup()
+    return ids
+
+
 def atualizar_leitura(id_: int, dados: dict) -> None:
     d = normalizar_leitura(dados)
     with _conexao() as con:
