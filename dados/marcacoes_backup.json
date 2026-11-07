@@ -1,6 +1,6 @@
 {
  "formato": "biblia-marcacoes/1",
- "exportado_em": "2026-11-07T01:14:16+00:00",
+ "exportado_em": "2026-11-07T01:54:47+00:00",
  "celebracoes": [
   {
    "id": 1,
@@ -35,70 +35,70 @@
    "nome": "Domingo II do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 2,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-05T00:22:51+00:00",
-   "atualizado_em": "2026-11-05T01:57:43+00:00"
+   "atualizado_em": "2026-11-07T01:29:17+00:00"
   },
   {
    "id": 4,
    "nome": "Domingo III do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 3,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-05T01:39:32+00:00",
-   "atualizado_em": "2026-11-05T01:57:34+00:00"
+   "atualizado_em": "2026-11-07T01:29:48+00:00"
   },
   {
    "id": 5,
    "nome": "Domingo IV do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 4,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-05T01:47:36+00:00",
-   "atualizado_em": "2026-11-05T01:57:26+00:00"
+   "atualizado_em": "2026-11-07T01:29:59+00:00"
   },
   {
    "id": 6,
    "nome": "Domingo V do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 5,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-05T01:57:02+00:00",
-   "atualizado_em": "2026-11-05T01:57:02+00:00"
+   "atualizado_em": "2026-11-07T01:30:12+00:00"
   },
   {
    "id": 7,
    "nome": "Domingo VI do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 6,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-05T02:10:22+00:00",
-   "atualizado_em": "2026-11-05T02:10:22+00:00"
+   "atualizado_em": "2026-11-07T01:38:24+00:00"
   },
   {
    "id": 8,
@@ -329,42 +329,42 @@
    "nome": "Domingo X do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 10,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T01:34:01+00:00",
-   "atualizado_em": "2026-11-06T01:34:01+00:00"
+   "atualizado_em": "2026-11-07T01:42:48+00:00"
   },
   {
    "id": 25,
    "nome": "Domingo XI do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 11,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T01:34:43+00:00",
-   "atualizado_em": "2026-11-06T01:34:43+00:00"
+   "atualizado_em": "2026-11-07T01:42:55+00:00"
   },
   {
    "id": 26,
    "nome": "Domingo XII do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 12,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T01:35:35+00:00",
-   "atualizado_em": "2026-11-06T01:35:35+00:00"
+   "atualizado_em": "2026-11-07T01:43:04+00:00"
   },
   {
    "id": 27,
@@ -399,70 +399,70 @@
    "nome": "Domingo XIV do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 14,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T01:58:27+00:00",
-   "atualizado_em": "2026-11-06T01:58:27+00:00"
+   "atualizado_em": "2026-11-07T01:43:12+00:00"
   },
   {
    "id": 30,
    "nome": "Domingo XV do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 15,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T02:01:03+00:00",
-   "atualizado_em": "2026-11-06T02:01:03+00:00"
+   "atualizado_em": "2026-11-07T01:43:19+00:00"
   },
   {
    "id": 31,
    "nome": "Domingo XVI do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 16,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T02:10:05+00:00",
-   "atualizado_em": "2026-11-06T02:10:05+00:00"
+   "atualizado_em": "2026-11-07T01:46:25+00:00"
   },
   {
    "id": 32,
    "nome": "Domingo XVII do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 17,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T02:12:05+00:00",
-   "atualizado_em": "2026-11-06T02:12:05+00:00"
+   "atualizado_em": "2026-11-07T01:46:32+00:00"
   },
   {
    "id": 33,
    "nome": "Domingo XVIII do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 18,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T12:39:16+00:00",
-   "atualizado_em": "2026-11-06T12:39:16+00:00"
+   "atualizado_em": "2026-11-07T01:46:42+00:00"
   },
   {
    "id": 34,
@@ -511,140 +511,140 @@
    "nome": "Domingo XXI do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 21,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:01:11+00:00",
-   "atualizado_em": "2026-11-06T13:01:11+00:00"
+   "atualizado_em": "2026-11-07T01:46:49+00:00"
   },
   {
    "id": 38,
    "nome": "Domingo XXII do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 22,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:01:51+00:00",
-   "atualizado_em": "2026-11-06T13:01:51+00:00"
+   "atualizado_em": "2026-11-07T01:47:09+00:00"
   },
   {
    "id": 39,
    "nome": "Domingo XXIII do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 23,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:02:58+00:00",
-   "atualizado_em": "2026-11-06T13:02:58+00:00"
+   "atualizado_em": "2026-11-07T01:47:46+00:00"
   },
   {
    "id": 40,
    "nome": "Domingo XXIV do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 24,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:03:52+00:00",
-   "atualizado_em": "2026-11-06T13:03:52+00:00"
+   "atualizado_em": "2026-11-07T01:48:33+00:00"
   },
   {
    "id": 41,
    "nome": "Domingo XXV do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 25,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:05:01+00:00",
-   "atualizado_em": "2026-11-06T13:05:01+00:00"
+   "atualizado_em": "2026-11-07T01:50:16+00:00"
   },
   {
    "id": 42,
    "nome": "Domingo XXVI do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 26,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:06:45+00:00",
-   "atualizado_em": "2026-11-06T13:06:45+00:00"
+   "atualizado_em": "2026-11-07T01:50:46+00:00"
   },
   {
    "id": 43,
    "nome": "Domingo XXVII do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 27,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:07:36+00:00",
-   "atualizado_em": "2026-11-06T13:07:36+00:00"
+   "atualizado_em": "2026-11-07T01:54:24+00:00"
   },
   {
    "id": 44,
    "nome": "Domingo XXVIII do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 28,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:09:44+00:00",
-   "atualizado_em": "2026-11-06T13:09:44+00:00"
+   "atualizado_em": "2026-11-07T01:54:34+00:00"
   },
   {
    "id": 45,
    "nome": "Domingo XXIX do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 29,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:23:36+00:00",
-   "atualizado_em": "2026-11-06T13:23:36+00:00"
+   "atualizado_em": "2026-11-07T01:48:56+00:00"
   },
   {
    "id": 46,
    "nome": "Domingo XXX do Tempo Comum",
    "cor": "Verde",
    "tempo": "Tempo Comum",
-   "semana": null,
+   "semana": 30,
    "dia_semana": "Domingo",
    "grau": "Domingo",
    "preceito": 1,
    "observacao": null,
    "arquivada": 0,
    "criado_em": "2026-11-06T13:25:52+00:00",
-   "atualizado_em": "2026-11-06T13:25:52+00:00"
+   "atualizado_em": "2026-11-07T01:54:47+00:00"
   },
   {
    "id": 47,
@@ -3673,6 +3673,10 @@
   {
    "celebracao_id": 2,
    "pasta_id": 1
+  },
+  {
+   "celebracao_id": 3,
+   "pasta_id": 3
   }
  ],
  "historico": [
@@ -10509,6 +10513,564 @@
     "cor": null
    },
    "registrado_em": "2026-11-07T01:14:16+00:00"
+  },
+  {
+   "id": 359,
+   "entidade": "celebracao",
+   "entidade_id": 3,
+   "acao": "movida de pasta",
+   "snapshot": {
+    "nome": "Domingo II do Tempo Comum",
+    "de": "(sem pasta)",
+    "para": "TEMPO COMUM › 2 SEMANA"
+   },
+   "registrado_em": "2026-11-07T01:20:20+00:00"
+  },
+  {
+   "id": 360,
+   "entidade": "celebracao",
+   "entidade_id": 3,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 3,
+    "nome": "Domingo II do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-05T00:22:51+00:00",
+    "atualizado_em": "2026-11-05T01:57:43+00:00"
+   },
+   "registrado_em": "2026-11-07T01:29:17+00:00"
+  },
+  {
+   "id": 361,
+   "entidade": "celebracao",
+   "entidade_id": 4,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 4,
+    "nome": "Domingo III do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-05T01:39:32+00:00",
+    "atualizado_em": "2026-11-05T01:57:34+00:00"
+   },
+   "registrado_em": "2026-11-07T01:29:48+00:00"
+  },
+  {
+   "id": 362,
+   "entidade": "celebracao",
+   "entidade_id": 5,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 5,
+    "nome": "Domingo IV do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-05T01:47:36+00:00",
+    "atualizado_em": "2026-11-05T01:57:26+00:00"
+   },
+   "registrado_em": "2026-11-07T01:29:59+00:00"
+  },
+  {
+   "id": 363,
+   "entidade": "celebracao",
+   "entidade_id": 6,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 6,
+    "nome": "Domingo V do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-05T01:57:02+00:00",
+    "atualizado_em": "2026-11-05T01:57:02+00:00"
+   },
+   "registrado_em": "2026-11-07T01:30:12+00:00"
+  },
+  {
+   "id": 364,
+   "entidade": "celebracao",
+   "entidade_id": 6,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 6,
+    "nome": "Domingo V do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": 5,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-05T01:57:02+00:00",
+    "atualizado_em": "2026-11-07T01:30:12+00:00"
+   },
+   "registrado_em": "2026-11-07T01:30:12+00:00"
+  },
+  {
+   "id": 365,
+   "entidade": "celebracao",
+   "entidade_id": 7,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 7,
+    "nome": "Domingo VI do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-05T02:10:22+00:00",
+    "atualizado_em": "2026-11-05T02:10:22+00:00"
+   },
+   "registrado_em": "2026-11-07T01:30:35+00:00"
+  },
+  {
+   "id": 366,
+   "entidade": "celebracao",
+   "entidade_id": 7,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 7,
+    "nome": "Domingo VI do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": 6,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-05T02:10:22+00:00",
+    "atualizado_em": "2026-11-07T01:30:35+00:00"
+   },
+   "registrado_em": "2026-11-07T01:38:24+00:00"
+  },
+  {
+   "id": 367,
+   "entidade": "celebracao",
+   "entidade_id": 24,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 24,
+    "nome": "Domingo X do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T01:34:01+00:00",
+    "atualizado_em": "2026-11-06T01:34:01+00:00"
+   },
+   "registrado_em": "2026-11-07T01:42:48+00:00"
+  },
+  {
+   "id": 368,
+   "entidade": "celebracao",
+   "entidade_id": 25,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 25,
+    "nome": "Domingo XI do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T01:34:43+00:00",
+    "atualizado_em": "2026-11-06T01:34:43+00:00"
+   },
+   "registrado_em": "2026-11-07T01:42:55+00:00"
+  },
+  {
+   "id": 369,
+   "entidade": "celebracao",
+   "entidade_id": 26,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 26,
+    "nome": "Domingo XII do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T01:35:35+00:00",
+    "atualizado_em": "2026-11-06T01:35:35+00:00"
+   },
+   "registrado_em": "2026-11-07T01:43:01+00:00"
+  },
+  {
+   "id": 370,
+   "entidade": "celebracao",
+   "entidade_id": 26,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 26,
+    "nome": "Domingo XII do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": 12,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T01:35:35+00:00",
+    "atualizado_em": "2026-11-07T01:43:01+00:00"
+   },
+   "registrado_em": "2026-11-07T01:43:04+00:00"
+  },
+  {
+   "id": 371,
+   "entidade": "celebracao",
+   "entidade_id": 29,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 29,
+    "nome": "Domingo XIV do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T01:58:27+00:00",
+    "atualizado_em": "2026-11-06T01:58:27+00:00"
+   },
+   "registrado_em": "2026-11-07T01:43:12+00:00"
+  },
+  {
+   "id": 372,
+   "entidade": "celebracao",
+   "entidade_id": 30,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 30,
+    "nome": "Domingo XV do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T02:01:03+00:00",
+    "atualizado_em": "2026-11-06T02:01:03+00:00"
+   },
+   "registrado_em": "2026-11-07T01:43:19+00:00"
+  },
+  {
+   "id": 373,
+   "entidade": "celebracao",
+   "entidade_id": 31,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 31,
+    "nome": "Domingo XVI do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T02:10:05+00:00",
+    "atualizado_em": "2026-11-06T02:10:05+00:00"
+   },
+   "registrado_em": "2026-11-07T01:46:25+00:00"
+  },
+  {
+   "id": 374,
+   "entidade": "celebracao",
+   "entidade_id": 32,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 32,
+    "nome": "Domingo XVII do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T02:12:05+00:00",
+    "atualizado_em": "2026-11-06T02:12:05+00:00"
+   },
+   "registrado_em": "2026-11-07T01:46:32+00:00"
+  },
+  {
+   "id": 375,
+   "entidade": "celebracao",
+   "entidade_id": 33,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 33,
+    "nome": "Domingo XVIII do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T12:39:16+00:00",
+    "atualizado_em": "2026-11-06T12:39:16+00:00"
+   },
+   "registrado_em": "2026-11-07T01:46:42+00:00"
+  },
+  {
+   "id": 376,
+   "entidade": "celebracao",
+   "entidade_id": 37,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 37,
+    "nome": "Domingo XXI do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:01:11+00:00",
+    "atualizado_em": "2026-11-06T13:01:11+00:00"
+   },
+   "registrado_em": "2026-11-07T01:46:49+00:00"
+  },
+  {
+   "id": 377,
+   "entidade": "celebracao",
+   "entidade_id": 38,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 38,
+    "nome": "Domingo XXII do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:01:51+00:00",
+    "atualizado_em": "2026-11-06T13:01:51+00:00"
+   },
+   "registrado_em": "2026-11-07T01:47:09+00:00"
+  },
+  {
+   "id": 378,
+   "entidade": "celebracao",
+   "entidade_id": 39,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 39,
+    "nome": "Domingo XXIII do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:02:58+00:00",
+    "atualizado_em": "2026-11-06T13:02:58+00:00"
+   },
+   "registrado_em": "2026-11-07T01:47:46+00:00"
+  },
+  {
+   "id": 379,
+   "entidade": "celebracao",
+   "entidade_id": 40,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 40,
+    "nome": "Domingo XXIV do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:03:52+00:00",
+    "atualizado_em": "2026-11-06T13:03:52+00:00"
+   },
+   "registrado_em": "2026-11-07T01:48:33+00:00"
+  },
+  {
+   "id": 380,
+   "entidade": "celebracao",
+   "entidade_id": 45,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 45,
+    "nome": "Domingo XXIX do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:23:36+00:00",
+    "atualizado_em": "2026-11-06T13:23:36+00:00"
+   },
+   "registrado_em": "2026-11-07T01:48:56+00:00"
+  },
+  {
+   "id": 381,
+   "entidade": "celebracao",
+   "entidade_id": 41,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 41,
+    "nome": "Domingo XXV do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:05:01+00:00",
+    "atualizado_em": "2026-11-06T13:05:01+00:00"
+   },
+   "registrado_em": "2026-11-07T01:50:16+00:00"
+  },
+  {
+   "id": 382,
+   "entidade": "celebracao",
+   "entidade_id": 42,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 42,
+    "nome": "Domingo XXVI do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:06:45+00:00",
+    "atualizado_em": "2026-11-06T13:06:45+00:00"
+   },
+   "registrado_em": "2026-11-07T01:50:46+00:00"
+  },
+  {
+   "id": 383,
+   "entidade": "celebracao",
+   "entidade_id": 43,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 43,
+    "nome": "Domingo XXVII do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:07:36+00:00",
+    "atualizado_em": "2026-11-06T13:07:36+00:00"
+   },
+   "registrado_em": "2026-11-07T01:54:24+00:00"
+  },
+  {
+   "id": 384,
+   "entidade": "celebracao",
+   "entidade_id": 44,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 44,
+    "nome": "Domingo XXVIII do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:09:44+00:00",
+    "atualizado_em": "2026-11-06T13:09:44+00:00"
+   },
+   "registrado_em": "2026-11-07T01:54:34+00:00"
+  },
+  {
+   "id": 385,
+   "entidade": "celebracao",
+   "entidade_id": 46,
+   "acao": "editada (estado anterior)",
+   "snapshot": {
+    "id": 46,
+    "nome": "Domingo XXX do Tempo Comum",
+    "cor": "Verde",
+    "tempo": "Tempo Comum",
+    "semana": null,
+    "dia_semana": "Domingo",
+    "grau": "Domingo",
+    "preceito": 1,
+    "observacao": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T13:25:52+00:00",
+    "atualizado_em": "2026-11-06T13:25:52+00:00"
+   },
+   "registrado_em": "2026-11-07T01:54:47+00:00"
   }
  ]
 }
