@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import re
+import unicodedata
 from typing import Optional
 
 # Cores litúrgicas para fundo escuro azul-marinho.
@@ -46,6 +48,95 @@ CICLOS = {
     "I": "Ano ímpar (I)",
     "II": "Ano par (II)",
 }
+
+
+# Pastas para organizar as celebrações (nomes escolhidos pelo usuário; aceitam subpastas).
+NOME_PASTA_MAX = 80
+SEM_PASTA = "(sem pasta)"
+SEPARADOR_PASTA = " › "
+
+
+def normalizar_nome_pasta(nome) -> str:
+    """Tira espaços sobrando; o nome é obrigatório e tem tamanho máximo."""
+    nome = re.sub(r"\s+", " ", nome or "").strip()
+    if not nome:
+        raise ValueError("O nome da pasta é obrigatório.")
+    if len(nome) > NOME_PASTA_MAX:
+        raise ValueError(f"O nome da pasta pode ter no máximo {NOME_PASTA_MAX} caracteres.")
+    return nome
+
+
+def caminho_pasta(pastas_por_id: dict, id_: Optional[int]) -> str:
+    """'Tempo Comum › 5ª semana' para a pasta id_ (ou '(sem pasta)'). pastas_por_id: {id: {'nome','pai_id'}}."""
+    if id_ is None:
+        return SEM_PASTA
+    partes, visto = [], set()
+    while id_ is not None and id_ in pastas_por_id and id_ not in visto:
+        visto.add(id_)
+        partes.append(pastas_por_id[id_]["nome"])
+        id_ = pastas_por_id[id_]["pai_id"]
+    return SEPARADOR_PASTA.join(reversed(partes))
+
+
+def normalizar_cor_pasta(cor) -> Optional[str]:
+    """Cor de destaque da pasta: vazia = sem cor; senão tem de ser uma das cores litúrgicas."""
+    if _vazio(cor):
+        return None
+    if cor not in CORES:
+        raise ValueError(f"Cor inválida para a pasta: {cor!r}.")
+    return cor
+
+
+# ------------------------------------------------------------
+# Ordenação natural (pastas) e por dia da semana (celebrações)
+# ------------------------------------------------------------
+_ROMANO = re.compile(r"^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$")
+_VALOR_ROMANO = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
+
+
+def _valor_romano(token: str) -> Optional[int]:
+    """Valor de um numeral romano em MAIÚSCULAS (I, II, IV, XII...); None se não for um.
+    Letras isoladas só valem se forem I, V ou X: assim 'Ano C' continua sendo a letra C."""
+    if not token.isupper() or not _ROMANO.match(token):
+        return None
+    if len(token) == 1 and token not in "IVX":
+        return None
+    total = anterior = 0
+    for letra in reversed(token):
+        v = _VALOR_ROMANO[letra]
+        if v < anterior:
+            total -= v
+        else:
+            total += v
+            anterior = v
+    return total
+
+
+def _sem_acento(texto: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFKD", texto) if not unicodedata.combining(c)).casefold()
+
+
+def chave_ordem_natural(texto: str):
+    """
+    Chave de ordenação que entende números e numerais romanos:
+    '2ª semana' < '10ª semana'  e  'Domingo II' < 'Domingo X'. Números/romanos vêm antes de palavras.
+    """
+    chave = []
+    for t in re.findall(r"\d+|[^\W\d_]+", texto or ""):
+        if t.isdecimal():
+            chave.append((0, int(t), ""))
+        elif (r := _valor_romano(t)) is not None:
+            chave.append((0, r, ""))
+        else:
+            chave.append((1, 0, _sem_acento(t)))
+    return (chave, (texto or "").casefold())
+
+
+def chave_ordem_celebracao(c: dict):
+    """Celebrações: pelo dia da semana (Domingo → Sábado; sem dia por último) e, depois, pelo nome."""
+    dia = c.get("dia_semana")
+    pos = DIAS_SEMANA.index(dia) if dia in DIAS_SEMANA else len(DIAS_SEMANA)
+    return (pos, chave_ordem_natural(c.get("nome", "")), c.get("id", 0))
 
 
 def rotulo_tipo(tipo: Optional[str], tipo_outro: Optional[str] = None) -> str:

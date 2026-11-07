@@ -12,13 +12,15 @@ from core.leitura_liturgica import ler_referencia
 from core.marcacoes import Filtros, Marca, cobertura, construir_indice, formatar_versiculos
 from core.marcacoes_lote import interpretar_bloco, ordem_legivel, tem_segunda_por_padrao
 from core.marcacoes_modelo import (
-    CICLOS, CORES, DIAS_SEMANA, GRAUS, TEMPOS, TIPOS_LEITURA, rotulo_ciclo, rotulo_tipo,
+    CICLOS, CORES, DIAS_SEMANA, GRAUS, SEM_PASTA, TEMPOS, TIPOS_LEITURA, caminho_pasta, chave_ordem_celebracao, chave_ordem_natural,
+    rotulo_ciclo, rotulo_tipo,
 )
 from storage import marcacoes_db as db
 from ui.render_marcado import altura_estimada, documento_html, filtrar_marcados
 
 SEM = "—"
 SEM_TIPO = "— sem tipo —"
+_ROTULO_ENTIDADE = {"celebracao": "Celebração", "leitura": "Leitura", "pasta": "Pasta"}
 
 
 # ------------------------------------------------------------
@@ -103,11 +105,15 @@ def pagina_marcacoes():
         "Cada celebração reúne suas leituras, escritas na notação da CNBB. Nada é apagado: "
         "“arquivar” esconde da Bíblia mas preserva tudo, e toda edição guarda o estado anterior."
     )
-    aba_nova, aba_lista, aba_backup = st.tabs(["➕ Nova celebração", "📋 Celebrações e leituras", "💾 Backup e histórico"])
+    aba_nova, aba_lista, aba_pastas, aba_backup = st.tabs(
+        ["➕ Nova celebração", "📋 Celebrações e leituras", "🗂️ Pastas", "💾 Backup e histórico"]
+    )
     with aba_nova:
         _aba_nova()
     with aba_lista:
         _aba_lista()
+    with aba_pastas:
+        _aba_pastas()
     with aba_backup:
         _aba_backup()
 
@@ -402,6 +408,318 @@ def _nova_leitura(cel: dict):
         (st.success if msg[0] == "ok" else st.error)(msg[1])
 
 
+# ---------- Pastas ----------
+def _msg_pastas(tipo: str, texto: str):
+    st.session_state["pastas_msg"] = (tipo, texto)
+
+
+def _acao_pastas(acao, texto_ok: str) -> bool:
+    """Executa uma ação do banco e deixa a mensagem (sucesso ou erro) para a próxima tela."""
+    try:
+        acao()
+    except ValueError as e:
+        _msg_pastas("erro", str(e))
+        return False
+    _msg_pastas("ok", texto_ok)
+    return True
+
+
+def _ir_pasta(pasta_id):
+    st.session_state["pasta_atual"] = pasta_id
+    st.session_state["pasta_cel_aberta"] = None
+
+
+def _abrir_celebracao(cid):
+    st.session_state["pasta_cel_aberta"] = cid
+
+
+def _cb_criar_pasta(pai_id):
+    nome = st.session_state.get(f"pasta_nova_{pai_id or 0}", "")
+    _acao_pastas(lambda: db.criar_pasta(nome, pai_id), f"Pasta “{nome.strip()}” criada.")
+
+
+def _cb_renomear_pasta(pid):
+    nome = st.session_state.get(f"pasta_ren_{pid}", "")
+    _acao_pastas(lambda: db.renomear_pasta(pid, nome), "Pasta renomeada.")
+
+
+def _cb_mover_pasta(pid):
+    destino = st.session_state.get(f"pasta_mvpai_{pid}", 0) or None
+    _acao_pastas(lambda: db.mover_pasta(pid, destino), "Pasta movida.")
+
+
+def _cb_arquivar_pasta(pid, pai_id):
+    if _acao_pastas(lambda: db.arquivar_pasta(pid), "Pasta arquivada (estava vazia)."):
+        _ir_pasta(pai_id)
+
+
+def _cb_cor_pasta(pid):
+    cor = st.session_state.get(f"pasta_cor_{pid}", SEM)
+    _acao_pastas(lambda: db.definir_cor_pasta(pid, None if cor == SEM else cor), "Cor da pasta atualizada.")
+
+
+def _contagem_pasta(n_sub: int, n_cel: int) -> str:
+    """Uma contagem só: subpastas, se tiver; senão, celebrações. Pasta vazia não leva texto."""
+    if n_sub:
+        return f"{n_sub} subpasta" + ("" if n_sub == 1 else "s")
+    if n_cel:
+        return f"{n_cel} celebraç" + ("ão" if n_cel == 1 else "ões")
+    return ""
+
+
+def _css_pastas_coloridas(pastas: list[dict]) -> str:
+    """Contorno colorido nos botões das pastas que têm cor (sem texto, sem ocupar espaço)."""
+    regras = []
+    for p in pastas:
+        c = CORES.get(p.get("cor") or "")
+        if not c:
+            continue
+        cor = c["borda"] if _luminancia(c["fill"]) < 0.05 else c["fill"]   # o preto usa a borda clara
+        regras.append(
+            f".st-key-pasta_ir_{p['id']} button{{border:2px solid {cor} !important;"
+            f"box-shadow:0 0 8px {cor}99 !important;}}"
+        )
+    return f"<style>{''.join(regras)}</style>" if regras else ""
+
+
+def _cb_restaurar_pasta(pid):
+    _acao_pastas(lambda: db.arquivar_pasta(pid, False), "Pasta restaurada.")
+
+
+def _cb_mover_celebracoes(ids_chave: str, pasta_id):
+    s = st.session_state
+    ids = list(s.get(ids_chave, []))
+    if not ids:
+        return
+    try:
+        n = db.mover_celebracoes(ids, pasta_id)
+    except ValueError as e:
+        _msg_pastas("erro", str(e))
+        return
+    _msg_pastas("ok", f"{n} celebração(ões) movida(s).")
+    s[ids_chave] = []
+
+
+def _cb_mover_uma(cid: int, chave: str):
+    destino = st.session_state.get(chave, 0) or None
+    try:
+        n = db.mover_celebracoes([cid], destino)
+    except ValueError as e:
+        _msg_pastas("erro", str(e))
+        return
+    _msg_pastas("ok", "Celebração movida." if n else "A celebração já estava nessa pasta.")
+
+
+def _descendentes_ui(por_id: dict, id_: int) -> set:
+    achados, fila = set(), [id_]
+    while fila:
+        atual = fila.pop()
+        for p in por_id.values():
+            if p["pai_id"] == atual and p["id"] not in achados:
+                achados.add(p["id"])
+                fila.append(p["id"])
+    return achados
+
+
+def _aba_pastas():
+    s = st.session_state
+    msg = s.pop("pastas_msg", None)
+    if msg:
+        (st.success if msg[0] == "ok" else st.error)(msg[1])
+
+    todas_pastas = db.listar_pastas(incluir_arquivadas=True)
+    pastas = [p for p in todas_pastas if not p["arquivada"]]
+    por_id = {p["id"]: p for p in pastas}
+    caminhos = {p["id"]: caminho_pasta(por_id, p["id"]) for p in pastas}
+
+    st.caption(
+        "Organize as celebrações em pastas com os nomes que você quiser (e subpastas dentro delas). "
+        "Dentro de cada celebração, as leituras aparecem separadas por ciclo automaticamente. "
+        "Nada é apagado: pasta só pode ser arquivada quando está vazia."
+    )
+    ver_arq = st.checkbox("Mostrar celebrações arquivadas", value=False, key="pastas_ver_arq")
+
+    todas_cel = sorted(db.listar_celebracoes(incluir_arquivadas=True), key=chave_ordem_celebracao)   # dia da semana
+    cel_por_id = {c["id"]: c for c in todas_cel}
+    visiveis = [c for c in todas_cel if ver_arq or not c["arquivada"]]
+    mapa = db.pastas_das_celebracoes()
+
+    def pasta_de(cid):
+        pid = mapa.get(cid)
+        return pid if pid in por_id else None
+
+    # --- celebração aberta: visão com subpastas por ciclo ---
+    aberta = s.get("pasta_cel_aberta")
+    if aberta in cel_por_id:
+        _detalhe_celebracao_pastas(cel_por_id[aberta], por_id, caminhos, pasta_de(aberta))
+        return
+
+    atual = s.get("pasta_atual")
+    if atual not in por_id:
+        atual = s["pasta_atual"] = None
+
+    # --- onde estou ---
+    trilha, x = [], atual
+    while x is not None:
+        trilha.append(por_id[x]["nome"])
+        x = por_id[x]["pai_id"]
+    caminho_txt = " › ".join(["Início"] + trilha[::-1])
+    filhas = [p for p in pastas if p["pai_id"] == atual]
+    st.markdown(
+        f"<div style='font-size:1.05rem;margin:.4rem 0'>📍 <b>{escape(caminho_txt)}</b></div>"
+        + _css_pastas_coloridas(filhas),
+        unsafe_allow_html=True,
+    )
+    if atual is not None:
+        c1, c2, _ = st.columns([1, 1, 3])
+        c1.button("🏠 Início", key="pasta_home", on_click=_ir_pasta, args=(None,))
+        c2.button("⬆️ Subir", key="pasta_up", on_click=_ir_pasta, args=(por_id[atual]["pai_id"],))
+
+    # --- subpastas (a seção só aparece se houver) ---
+    if filhas:
+        cols = st.columns(2)
+        for i, p in enumerate(filhas):
+            n_sub = sum(1 for q in pastas if q["pai_id"] == p["id"])
+            n_cel = sum(1 for c in visiveis if pasta_de(c["id"]) == p["id"])
+            contagem = _contagem_pasta(n_sub, n_cel)
+            rotulo = f"📁 {p['nome']} - {contagem}" if contagem else f"📁 {p['nome']}"
+            cols[i % 2].button(rotulo, key=f"pasta_ir_{p['id']}", on_click=_ir_pasta, args=(p["id"],))
+
+    # --- celebrações desta pasta ---
+    aqui = [c for c in visiveis if pasta_de(c["id"]) == atual]
+    n_leituras: dict[int, int] = {}
+    for l in db.listar_leituras():
+        n_leituras[l["celebracao_id"]] = n_leituras.get(l["celebracao_id"], 0) + 1
+    if aqui:
+        st.markdown("##### 🕊️ Celebrações " + ("nesta pasta" if atual is not None else "sem pasta"))
+    for c in aqui:
+        esq, dir_ = st.columns([5, 1])
+        info = " · ".join(t for t in (c.get("grau"), c.get("tempo"), f"{n_leituras.get(c['id'], 0)} leitura(s)") if t)
+        arq = " 🗄️ arquivada" if c["arquivada"] else ""
+        esq.markdown(
+            f"{chip_cor(c['cor'])} <b>{escape(c['nome'])}</b> "
+            f"<span style='opacity:.7'>{escape(info)}{arq}</span>", unsafe_allow_html=True,
+        )
+        dir_.button("Abrir", key=f"pasta_abrir_{c['id']}", on_click=_abrir_celebracao, args=(c["id"],))
+
+    # --- mover várias celebrações para cá ---
+    destino_txt = "esta pasta" if atual is not None else "“sem pasta”"
+    with st.expander(f"📥 Mover celebrações para {destino_txt}"):
+        candidatas = [c["id"] for c in visiveis if pasta_de(c["id"]) != atual]
+        if not candidatas:
+            st.caption("Todas as celebrações já estão aqui.")
+        else:
+            chave = f"pasta_mvcel_{atual or 0}"
+            s[chave] = [i for i in s.get(chave, []) if i in candidatas]     # evita valores que já não são opção
+            st.multiselect(
+                "Escolha as celebrações", candidatas, key=chave,
+                format_func=lambda i: f"{cel_por_id[i]['nome']}  —  📁 {caminho_pasta(por_id, pasta_de(i))}",
+            )
+            st.button(f"Mover para {destino_txt}", type="primary", key=f"pasta_mvcel_btn_{atual or 0}",
+                      disabled=not s[chave], on_click=_cb_mover_celebracoes, args=(chave, atual))
+
+    # --- nova pasta ---
+    st.divider()
+    onde = f"dentro de “{por_id[atual]['nome']}”" if atual is not None else "no início"
+    with st.form(f"form_pasta_nova_{atual or 0}", clear_on_submit=True):
+        st.text_input(f"Nova pasta {onde}", key=f"pasta_nova_{atual or 0}", placeholder="Ex.: Solenidades de data móvel")
+        st.form_submit_button("➕ Criar pasta", type="primary", on_click=_cb_criar_pasta, args=(atual,))
+
+    # --- gerenciar a pasta atual ---
+    if atual is not None:
+        pasta = por_id[atual]
+        with st.expander("⚙️ Gerenciar esta pasta"):
+            st.text_input("Nome", value=pasta["nome"], key=f"pasta_ren_{atual}")
+            st.button("Renomear", key=f"pasta_ren_btn_{atual}", on_click=_cb_renomear_pasta, args=(atual,))
+
+            opcoes_cor = [SEM] + list(CORES)
+            chave_cor = f"pasta_cor_{atual}"
+            if s.get(chave_cor, SEM) not in opcoes_cor:
+                s.pop(chave_cor, None)
+            st.selectbox(
+                "Cor de destaque (contorno na lista de pastas)", opcoes_cor, key=chave_cor,
+                index=opcoes_cor.index(pasta.get("cor") or SEM),
+                format_func=lambda c: "(sem cor)" if c == SEM else c,
+                on_change=_cb_cor_pasta, args=(atual,),
+            )
+
+            proibidas = {atual} | _descendentes_ui(por_id, atual)
+            opcoes = [0] + sorted((i for i in por_id if i not in proibidas), key=lambda i: chave_ordem_natural(caminhos[i]))
+            chave_pai = f"pasta_mvpai_{atual}"
+            if s.get(chave_pai, 0) not in opcoes:
+                s.pop(chave_pai, None)
+            st.selectbox(
+                "Mover esta pasta (com tudo o que tem dentro) para", opcoes, key=chave_pai,
+                index=opcoes.index(pasta["pai_id"] or 0),
+                format_func=lambda i: "(início)" if i == 0 else caminhos[i],
+            )
+            st.button("Mover pasta", key=f"pasta_mv_btn_{atual}", on_click=_cb_mover_pasta, args=(atual,))
+
+            vazia = not filhas and not any(v == atual for v in mapa.values())
+            st.button(
+                "🗄️ Arquivar pasta", key=f"pasta_arq_{atual}", disabled=not vazia,
+                help="Só é possível arquivar uma pasta vazia (sem subpastas nem celebrações).",
+                on_click=_cb_arquivar_pasta, args=(atual, pasta["pai_id"]),
+            )
+            if not vazia:
+                st.caption("Para arquivar, primeiro mova as celebrações e as subpastas para outro lugar.")
+
+    # --- pastas arquivadas (restaurar) ---
+    arquivadas = [p for p in todas_pastas if p["arquivada"]]
+    if atual is None and arquivadas:
+        todas_por_id = {p["id"]: p for p in todas_pastas}
+        with st.expander(f"🗄️ Pastas arquivadas ({len(arquivadas)})"):
+            for p in arquivadas:
+                a, b = st.columns([4, 1])
+                a.text(caminho_pasta(todas_por_id, p["id"]))
+                b.button("♻️ Restaurar", key=f"pasta_rest_{p['id']}", on_click=_cb_restaurar_pasta, args=(p["id"],))
+
+
+def _detalhe_celebracao_pastas(cel: dict, por_id: dict, caminhos: dict, pasta_id):
+    """Uma celebração por dentro: leituras agrupadas em 'subpastas' por ciclo (automático)."""
+    st.button("⬅️ Voltar", key="pasta_voltar", on_click=_abrir_celebracao, args=(None,))
+    extras = [t for t in (cel.get("grau"), cel.get("tempo"), f"{cel['semana']}ª semana" if cel.get("semana") else None,
+                          cel.get("dia_semana")) if t]
+    st.markdown(
+        f"<h4 style='margin:.6rem 0 .2rem'>{escape(cel['nome'])}</h4>"
+        f"{chip_cor(cel['cor'])} {escape(' · '.join(extras))}", unsafe_allow_html=True,
+    )
+    st.caption("📁 " + caminho_pasta(por_id, pasta_id))
+
+    with st.expander("📁 Mover para outra pasta"):
+        opcoes = [0] + sorted(por_id, key=lambda i: chave_ordem_natural(caminhos[i]))
+        chave = f"pasta_mv1_{cel['id']}"
+        if st.session_state.get(chave, 0) not in opcoes:
+            st.session_state.pop(chave, None)
+        st.selectbox(
+            "Destino", opcoes, key=chave, index=opcoes.index(pasta_id or 0),
+            format_func=lambda i: SEM_PASTA if i == 0 else caminhos[i],
+        )
+        st.button("Mover", key=f"pasta_mv1_btn_{cel['id']}", on_click=_cb_mover_uma, args=(cel["id"], chave))
+
+    leituras = db.listar_leituras(cel["id"])
+    st.markdown("##### Leituras por ciclo")
+    if not leituras:
+        st.caption("Esta celebração ainda não tem leituras.")
+    ordem_tipo = {k: i for i, k in enumerate(TIPOS_LEITURA)}
+    por_ciclo: dict[str, list] = {}
+    for l in leituras:
+        por_ciclo.setdefault(l["ciclo"], []).append(l)
+    for ciclo in CICLOS:
+        grupo = por_ciclo.get(ciclo)
+        if not grupo:
+            continue
+        grupo.sort(key=lambda l: (ordem_tipo.get(l["tipo"], 99), l["id"]))
+        with st.expander(f"📁 {rotulo_ciclo(ciclo)}  ·  {len(grupo)} leitura(s)", expanded=True):
+            for l in grupo:
+                tipo = rotulo_tipo(l["tipo"], l["tipo_outro"]) or "sem tipo"
+                sinal = "✅" if cobertura(l["referencia"])["interpretada"] else "⚠️"
+                st.markdown(f"{sinal} <b>{escape(tipo)}</b> — {escape(l['referencia'])}", unsafe_allow_html=True)
+                if l["observacao"]:
+                    st.caption(l["observacao"])
+    st.caption("Para editar ou arquivar leituras, use a aba “Celebrações e leituras”.")
+
+
 # ---------- Backup e histórico ----------
 def _aba_backup():
     st.markdown("**Onde estão os dados**")
@@ -438,7 +756,7 @@ def _aba_backup():
         snap = e["snapshot"]
         linhas.append({
             "Quando (UTC)": e["registrado_em"].replace("T", " "),
-            "O quê": f"{'Celebração' if e['entidade'] == 'celebracao' else 'Leitura'} #{e['entidade_id']}",
+            "O quê": f"{_ROTULO_ENTIDADE.get(e['entidade'], e['entidade'])} #{e['entidade_id']}",
             "Ação": e["acao"],
             "Conteúdo": snap.get("nome") or snap.get("referencia") or "",
         })

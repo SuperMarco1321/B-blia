@@ -1,6 +1,6 @@
 {
  "formato": "biblia-marcacoes/1",
- "exportado_em": "2026-11-06T13:37:31+00:00",
+ "exportado_em": "2026-11-07T01:14:16+00:00",
  "celebracoes": [
   {
    "id": 1,
@@ -3553,6 +3553,126 @@
    "arquivada": 0,
    "criado_em": "2026-11-06T13:37:30+00:00",
    "atualizado_em": "2026-11-06T13:37:30+00:00"
+  }
+ ],
+ "pastas": [
+  {
+   "id": 1,
+   "nome": "1 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:29:42+00:00",
+   "atualizado_em": "2026-11-06T20:39:31+00:00",
+   "cor": null
+  },
+  {
+   "id": 2,
+   "nome": "TEMPO COMUM",
+   "pai_id": null,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:38:44+00:00",
+   "atualizado_em": "2026-11-07T01:14:16+00:00",
+   "cor": "Verde"
+  },
+  {
+   "id": 3,
+   "nome": "2 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:40:15+00:00",
+   "atualizado_em": "2026-11-06T20:40:15+00:00",
+   "cor": null
+  },
+  {
+   "id": 4,
+   "nome": "3 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:40:23+00:00",
+   "atualizado_em": "2026-11-06T20:40:23+00:00",
+   "cor": null
+  },
+  {
+   "id": 5,
+   "nome": "4 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:40:27+00:00",
+   "atualizado_em": "2026-11-06T20:40:27+00:00",
+   "cor": null
+  },
+  {
+   "id": 6,
+   "nome": "5 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:40:29+00:00",
+   "atualizado_em": "2026-11-06T20:40:29+00:00",
+   "cor": null
+  },
+  {
+   "id": 7,
+   "nome": "6 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:40:32+00:00",
+   "atualizado_em": "2026-11-06T20:40:32+00:00",
+   "cor": null
+  },
+  {
+   "id": 8,
+   "nome": "7 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:40:35+00:00",
+   "atualizado_em": "2026-11-06T20:41:09+00:00",
+   "cor": null
+  },
+  {
+   "id": 9,
+   "nome": "8 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:41:21+00:00",
+   "atualizado_em": "2026-11-06T20:41:21+00:00",
+   "cor": null
+  },
+  {
+   "id": 10,
+   "nome": "9 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:41:27+00:00",
+   "atualizado_em": "2026-11-06T20:41:27+00:00",
+   "cor": null
+  },
+  {
+   "id": 11,
+   "nome": "10 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:41:31+00:00",
+   "atualizado_em": "2026-11-06T20:41:31+00:00",
+   "cor": null
+  },
+  {
+   "id": 12,
+   "nome": "11 SEMANA",
+   "pai_id": 2,
+   "arquivada": 0,
+   "criado_em": "2026-11-06T20:41:46+00:00",
+   "atualizado_em": "2026-11-06T20:44:46+00:00",
+   "cor": null
+  }
+ ],
+ "celebracao_pasta": [
+  {
+   "celebracao_id": 1,
+   "pasta_id": null
+  },
+  {
+   "celebracao_id": 2,
+   "pasta_id": 1
   }
  ],
  "historico": [
@@ -10097,6 +10217,298 @@
     "atualizado_em": "2026-11-06T13:37:30+00:00"
    },
    "registrado_em": "2026-11-06T13:37:30+00:00"
+  },
+  {
+   "id": 339,
+   "entidade": "pasta",
+   "entidade_id": 1,
+   "acao": "criada",
+   "snapshot": {
+    "id": 1,
+    "nome": "1 SEMANA COMUM",
+    "pai_id": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:29:42+00:00",
+    "atualizado_em": "2026-11-06T20:29:42+00:00"
+   },
+   "registrado_em": "2026-11-06T20:29:42+00:00"
+  },
+  {
+   "id": 340,
+   "entidade": "celebracao",
+   "entidade_id": 1,
+   "acao": "movida de pasta",
+   "snapshot": {
+    "nome": "Epifania do Senhor",
+    "de": "(sem pasta)",
+    "para": "1 SEMANA COMUM"
+   },
+   "registrado_em": "2026-11-06T20:31:10+00:00"
+  },
+  {
+   "id": 341,
+   "entidade": "celebracao",
+   "entidade_id": 2,
+   "acao": "movida de pasta",
+   "snapshot": {
+    "nome": "Baptismo do Senhor",
+    "de": "(sem pasta)",
+    "para": "1 SEMANA COMUM"
+   },
+   "registrado_em": "2026-11-06T20:35:21+00:00"
+  },
+  {
+   "id": 342,
+   "entidade": "celebracao",
+   "entidade_id": 1,
+   "acao": "movida de pasta",
+   "snapshot": {
+    "nome": "Epifania do Senhor",
+    "de": "1 SEMANA COMUM",
+    "para": "(sem pasta)"
+   },
+   "registrado_em": "2026-11-06T20:35:52+00:00"
+  },
+  {
+   "id": 343,
+   "entidade": "pasta",
+   "entidade_id": 1,
+   "acao": "renomeada (estado anterior)",
+   "snapshot": {
+    "id": 1,
+    "nome": "1 SEMANA COMUM",
+    "pai_id": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:29:42+00:00",
+    "atualizado_em": "2026-11-06T20:29:42+00:00"
+   },
+   "registrado_em": "2026-11-06T20:38:13+00:00"
+  },
+  {
+   "id": 344,
+   "entidade": "pasta",
+   "entidade_id": 2,
+   "acao": "criada",
+   "snapshot": {
+    "id": 2,
+    "nome": "TEMPO COMUM",
+    "pai_id": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:38:44+00:00",
+    "atualizado_em": "2026-11-06T20:38:44+00:00"
+   },
+   "registrado_em": "2026-11-06T20:38:44+00:00"
+  },
+  {
+   "id": 345,
+   "entidade": "pasta",
+   "entidade_id": 1,
+   "acao": "movida (estado anterior)",
+   "snapshot": {
+    "id": 1,
+    "nome": "1 SEMANA",
+    "pai_id": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:29:42+00:00",
+    "atualizado_em": "2026-11-06T20:38:13+00:00"
+   },
+   "registrado_em": "2026-11-06T20:39:31+00:00"
+  },
+  {
+   "id": 346,
+   "entidade": "pasta",
+   "entidade_id": 3,
+   "acao": "criada",
+   "snapshot": {
+    "id": 3,
+    "nome": "2 SEMANA",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:40:15+00:00",
+    "atualizado_em": "2026-11-06T20:40:15+00:00"
+   },
+   "registrado_em": "2026-11-06T20:40:15+00:00"
+  },
+  {
+   "id": 347,
+   "entidade": "pasta",
+   "entidade_id": 4,
+   "acao": "criada",
+   "snapshot": {
+    "id": 4,
+    "nome": "3 SEMANA",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:40:23+00:00",
+    "atualizado_em": "2026-11-06T20:40:23+00:00"
+   },
+   "registrado_em": "2026-11-06T20:40:23+00:00"
+  },
+  {
+   "id": 348,
+   "entidade": "pasta",
+   "entidade_id": 5,
+   "acao": "criada",
+   "snapshot": {
+    "id": 5,
+    "nome": "4 SEMANA",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:40:27+00:00",
+    "atualizado_em": "2026-11-06T20:40:27+00:00"
+   },
+   "registrado_em": "2026-11-06T20:40:27+00:00"
+  },
+  {
+   "id": 349,
+   "entidade": "pasta",
+   "entidade_id": 6,
+   "acao": "criada",
+   "snapshot": {
+    "id": 6,
+    "nome": "5 SEMANA",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:40:29+00:00",
+    "atualizado_em": "2026-11-06T20:40:29+00:00"
+   },
+   "registrado_em": "2026-11-06T20:40:29+00:00"
+  },
+  {
+   "id": 350,
+   "entidade": "pasta",
+   "entidade_id": 7,
+   "acao": "criada",
+   "snapshot": {
+    "id": 7,
+    "nome": "6 SEMANA",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:40:32+00:00",
+    "atualizado_em": "2026-11-06T20:40:32+00:00"
+   },
+   "registrado_em": "2026-11-06T20:40:32+00:00"
+  },
+  {
+   "id": 351,
+   "entidade": "pasta",
+   "entidade_id": 8,
+   "acao": "criada",
+   "snapshot": {
+    "id": 8,
+    "nome": "7",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:40:35+00:00",
+    "atualizado_em": "2026-11-06T20:40:35+00:00"
+   },
+   "registrado_em": "2026-11-06T20:40:35+00:00"
+  },
+  {
+   "id": 352,
+   "entidade": "pasta",
+   "entidade_id": 8,
+   "acao": "renomeada (estado anterior)",
+   "snapshot": {
+    "id": 8,
+    "nome": "7",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:40:35+00:00",
+    "atualizado_em": "2026-11-06T20:40:35+00:00"
+   },
+   "registrado_em": "2026-11-06T20:41:09+00:00"
+  },
+  {
+   "id": 353,
+   "entidade": "pasta",
+   "entidade_id": 9,
+   "acao": "criada",
+   "snapshot": {
+    "id": 9,
+    "nome": "8 SEMANA",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:41:21+00:00",
+    "atualizado_em": "2026-11-06T20:41:21+00:00"
+   },
+   "registrado_em": "2026-11-06T20:41:21+00:00"
+  },
+  {
+   "id": 354,
+   "entidade": "pasta",
+   "entidade_id": 10,
+   "acao": "criada",
+   "snapshot": {
+    "id": 10,
+    "nome": "9 SEMANA",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:41:27+00:00",
+    "atualizado_em": "2026-11-06T20:41:27+00:00"
+   },
+   "registrado_em": "2026-11-06T20:41:27+00:00"
+  },
+  {
+   "id": 355,
+   "entidade": "pasta",
+   "entidade_id": 11,
+   "acao": "criada",
+   "snapshot": {
+    "id": 11,
+    "nome": "10 SEMANA",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:41:31+00:00",
+    "atualizado_em": "2026-11-06T20:41:31+00:00"
+   },
+   "registrado_em": "2026-11-06T20:41:31+00:00"
+  },
+  {
+   "id": 356,
+   "entidade": "pasta",
+   "entidade_id": 12,
+   "acao": "criada",
+   "snapshot": {
+    "id": 12,
+    "nome": "SEMANA 10",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:41:46+00:00",
+    "atualizado_em": "2026-11-06T20:41:46+00:00"
+   },
+   "registrado_em": "2026-11-06T20:41:46+00:00"
+  },
+  {
+   "id": 357,
+   "entidade": "pasta",
+   "entidade_id": 12,
+   "acao": "renomeada (estado anterior)",
+   "snapshot": {
+    "id": 12,
+    "nome": "SEMANA 10",
+    "pai_id": 2,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:41:46+00:00",
+    "atualizado_em": "2026-11-06T20:41:46+00:00"
+   },
+   "registrado_em": "2026-11-06T20:44:46+00:00"
+  },
+  {
+   "id": 358,
+   "entidade": "pasta",
+   "entidade_id": 2,
+   "acao": "cor alterada (estado anterior)",
+   "snapshot": {
+    "id": 2,
+    "nome": "TEMPO COMUM",
+    "pai_id": null,
+    "arquivada": 0,
+    "criado_em": "2026-11-06T20:38:44+00:00",
+    "atualizado_em": "2026-11-06T20:38:44+00:00",
+    "cor": null
+   },
+   "registrado_em": "2026-11-07T01:14:16+00:00"
   }
  ]
 }
